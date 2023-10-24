@@ -1,0 +1,13 @@
+myself:
+  hosts:
+    workstation:
+intranetweb:
+  hosts:
+    servera.lab.example.com:
+internetweb:
+  hosts:
+    serverb.lab.example.com
+web:
+  children:
+    intranetweb:
+    internetweb:

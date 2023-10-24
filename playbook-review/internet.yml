@@ -1,0 +1,49 @@
+---
+- name: Enabled internet services
+  hosts: serverb.lab.example.com
+  become: true
+  tasks: 
+    - name: Install latest versions of Firewalld, Httpd, Mariadb, and MYSQL
+      ansible.builtin.dnf:
+        name: 
+          - firewalld
+          - httpd
+          - mariadb-server
+          - php
+          - php-mysqlnd
+        state: latest
+    - name: Ensure firewall is running
+      ansible.builtin.service:
+        name: firewalld
+        state: started
+        enabled: true
+    - name: Ensure firewall allows http
+      ansible.posix.firewalld: 
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+    - name: Ensure httpd is running
+      ansible.builtin.service: 
+        name: httpd
+        state: started
+        enabled: true
+    - name: Ensure miriadb is running
+      ansible.builtin.service:
+        name: mariadb
+        state: started
+        enabled: true
+    - name: Copy of html file
+      ansible.builtin.copy:
+        src: index.php
+        dest: /var/www/html/index.php
+        mode: 0664
+
+- name: Test Web Server
+  hosts: localhost
+  tasks: 
+    - name: test uri
+      ansible.builtin.uri: 
+        url: http://serverb.lab.example.com
+        return_content: yes
+        status_code: 200  
