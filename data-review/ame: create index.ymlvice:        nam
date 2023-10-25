@@ -1,0 +1,4 @@
+ame: create index.html
+      ansible.builtin.copy:
+             content: "{{ a}Ansible.\n"
+                     dest: "e: "}
